@@ -6,7 +6,7 @@ function App() {
   }
 
   const pessoa = {
-    nome: "Maria"
+    nome: "Beci"
   }
 
   let estaDeDia = true;
