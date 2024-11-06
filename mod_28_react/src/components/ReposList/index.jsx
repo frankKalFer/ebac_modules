@@ -1,36 +1,48 @@
 import { useEffect, useState } from "react";
 
-const ReposList = () => {
+import styles from './ReposList.module.css'
+
+const ReposList = ({ nomeUsuario }) => {
     const [repos, setRepos] = useState([]);
     const [estaCarregando, setEstaCarregando] = useState(true);
 
     useEffect(() => {
-        fetch('https://api.github.com/users/frankKalFer/repos')
+        setEstaCarregando(true);
+        fetch(`https://api.github.com/users/${nomeUsuario}/repos`)
             .then(res => res.json())
             .then(resJson => {
                 setTimeout(() => {
                     setEstaCarregando(false);
                     setRepos(resJson);
-                }, 3000);
+                }, 2000);
             })
-    }, []);
+    }, [nomeUsuario]);
 
     return (
-        <>
-            {estaCarregando && (
+        <div className="container">
+            {estaCarregando ? (
                 <h1>Carregando...</h1>
-            )}
-            <ul>
-                {repos.map(repositorio => (
-                    <li key={repositorio.id}>
-                        <b>Nome:</b> {repositorio.name} <br />
-                        <b>Linguagem:</b> {repositorio.language} <br />
-                        <a target="_blank" href={repositorio.html_url}>Visitar no Github</a> <br /> <br />
-                    </li>
-                ))}
+            ) : (
 
-            </ul>
-        </>
+                <ul className={styles.list}>
+                    {repos.map(repositorio => (
+                        <li className={styles.listItem} key={repositorio.id}>
+
+                            <div className={styles.itemName}>
+                                <b>Nome:</b> {repositorio.name}
+                            </div>
+
+                            <div className={styles.itemLanguage}>
+                                <b>Linguagem:</b> {repositorio.language}
+                            </div>
+
+                            <a className={styles.itemLink} target="_blank" href={repositorio.html_url}>Visitar no Github</a> <br />
+                        </li>
+                    ))}
+
+                </ul>
+            )}
+        </div>
     )
 }
 
